@@ -243,15 +243,15 @@ fi
 
 # 7) AXFR checks aligned with lab setup
 # Note: AXFR from the primary to itself is typically refused due to allow-transfer.
-#       Validate serial sync (above). Primary-to-secondary AXFR is expected to succeed when run on the secondary.
-#       From this host, you can verify the partner's own zone via the partner server.
+#       Validate serial sync (above). Since this host is secondary for the partner's zone,
+#       verify AXFR of the PARTNER zone from this host (my server) to confirm it serves the zone.
 
-if [ -n "$PARTNER_IPV4" ]; then
-  AXFR_PARTNER_ZONE=$(dig AXFR "$PARTNER_ZONE" @"$PARTNER_IPV4" +nocmd +noall +answer 2>/dev/null)
-  if echo "$AXFR_PARTNER_ZONE" | grep -qi "SOA"; then
-    ok "AXFR of partner zone ($PARTNER_ZONE) from partner server ($PARTNER_IPV4) returned records"
+if [ -n "$MY_IPV4" ]; then
+  AXFR_PARTNER_FROM_ME=$(dig AXFR "$PARTNER_ZONE" @"$MY_IPV4" +nocmd +noall +answer 2>/dev/null)
+  if echo "$AXFR_PARTNER_FROM_ME" | grep -qi "SOA"; then
+    ok "AXFR of partner zone ($PARTNER_ZONE) from my server ($MY_IPV4) returned records"
   else
-    wi "AXFR of partner zone ($PARTNER_ZONE) from partner server ($PARTNER_IPV4) returned no records (partner may restrict allow-transfer)"
+    wi "AXFR of partner zone ($PARTNER_ZONE) from my server ($MY_IPV4) returned no records (ensure my server is secondary and serving the zone)"
   fi
 fi
 
