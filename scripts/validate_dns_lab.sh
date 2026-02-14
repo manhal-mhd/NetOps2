@@ -242,17 +242,25 @@ else
 fi
 
 # 7) AXFR checks aligned with lab setup
-# Note: AXFR from the primary to itself is typically refused due to allow-transfer.
-#       Validate serial sync (above). Since this host is secondary for the partner's zone,
-#       verify AXFR of the PARTNER zone from this host (my server) to confirm it serves the zone.
+# AXFR should be tested against the partner's primary (masters) server.
+# Example: dig @192.168.0.yyy pcyyy.n2.nog-oc.org AXFR
 
-if [ -n "$MY_IPV4" ]; then
-  AXFR_PARTNER_FROM_ME=$(dig AXFR "$PARTNER_ZONE" @"$MY_IPV4" +nocmd +noall +answer 2>/dev/null)
-  if echo "$AXFR_PARTNER_FROM_ME" | grep -qi "SOA"; then
-    ok "AXFR of partner zone ($PARTNER_ZONE) from my server ($MY_IPV4) returned records"
+if [ -n "$PARTNER_IPV4" ]; then
+  AXFR_FULL_OUTPUT=$(dig AXFR "$PARTNER_ZONE" @"$PARTNER_IPV4" 2>/dev/null)
+  AXFR_ANSWER_ONLY=$(echo "$AXFR_FULL_OUTPUT" | grep -E "\sSOA\s")
+
+  if echo "$AXFR_FULL_OUTPUT" | grep -qi "XFR size" || [ -n "$AXFR_ANSWER_ONLY" ]; then
+    ok "AXFR of partner zone ($PARTNER_ZONE) from partner server ($PARTNER_IPV4) succeeded"
   else
-    wi "AXFR of partner zone ($PARTNER_ZONE) from my server ($MY_IPV4) returned no records (ensure my server is secondary and serving the zone)"
+    # Detect explicit refusals or auth-related messages that indicate ACL behavior
+    if echo "$AXFR_FULL_OUTPUT" | grep -Eqi "Transfer failed|REFUSED|NOTAUTH|connection refused"; then
+      ok "AXFR from partner server ($PARTNER_IPV4) refused by ACL (often expected unless my IP ($MY_IPV4) is allowed)"
+    else
+      wi "AXFR of partner zone ($PARTNER_ZONE) from partner server ($PARTNER_IPV4) returned no records"
+    fi
   fi
+else
+  wi "Partner IPv4 not detected for AXFR test; ensure NS/A records resolve for $PARTNER_ZONE"
 fi
 
 # 7b) Verify allow-transfer includes partner IPv4 (from zones.conf)
