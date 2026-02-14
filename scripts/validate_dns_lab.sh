@@ -31,9 +31,22 @@ pass=0
 fail=0
 warn=0
 
-ok() { echo "[OK]  $1"; pass=$((pass+1)); }
-ko() { echo "[FAIL] $1"; fail=$((fail+1)); }
-wi() { echo "[WARN] $1"; warn=$((warn+1)); }
+# Color setup (disable with NO_COLOR=1 or when not a TTY)
+if [ -t 1 ] && [ -z "$NO_COLOR" ]; then
+  GREEN='\033[32m'
+  RED='\033[31m'
+  YELLOW='\033[33m'
+  CYAN='\033[36m'
+  BOLD='\033[1m'
+  DIM='\033[2m'
+  RESET='\033[0m'
+else
+  GREEN=''; RED=''; YELLOW=''; CYAN=''; BOLD=''; DIM=''; RESET=''
+fi
+
+ok() { printf "%b[OK]%b  %s\n" "$GREEN" "$RESET" "$1"; pass=$((pass+1)); }
+ko() { printf "%b[FAIL]%b %s\n" "$RED" "$RESET" "$1"; fail=$((fail+1)); }
+wi() { printf "%b[WARN]%b %s\n" "$YELLOW" "$RESET" "$1"; warn=$((warn+1)); }
 
 # Prompt with default (keeps value if user presses Enter)
 prompt_with_default() {
@@ -144,7 +157,7 @@ if [ -r "/etc/namedb/zones.conf" ]; then
   ' /etc/namedb/zones.conf)
 fi
 
-echo "\n=== Validation Targets ==="
+printf "\n%b%b=== Validation Targets ===%b\n" "$BOLD" "$CYAN" "$RESET"
 echo "My zone:            $MY_ZONE"
 echo "Partner zone:        $PARTNER_ZONE"
 echo "My IPv4 (auto):      ${MY_IPV4:-(not detected)}"
@@ -152,7 +165,7 @@ echo "My IPv6 (auto):      ${MY_IPV6:-(not detected)}"
 echo "Partner IPv4 (from NS): ${PARTNER_IPV4:-(not detected)}"
 echo "My zone file (auto): ${MY_ZONE_FILE:-(not found)}"
 echo "allow-transfer IPs:  ${ALLOW_XFER_IPS:-(none found)}"
-echo "==========================\n"
+printf "%b==========================%b\n" "$CYAN" "$RESET"
 
 # 1) Check named.conf syntax
 if named-checkconf >/dev/null 2>&1; then
@@ -304,12 +317,12 @@ else
   wi "System resolver did not return NS for my zone (check /etc/resolv.conf)"
 fi
 
-echo "\n=== Summary ==="
+printf "\n%b%b=== Summary ===%b\n" "$BOLD" "$CYAN" "$RESET"
 echo "Pass: $pass  Fail: $fail  Warn: $warn"
 if [ "$fail" -gt 0 ]; then
-  echo "Overall: Some checks FAILED. Review messages above."
+  printf "%bOverall: Some checks FAILED. Review messages above.%b\n" "$RED" "$RESET"
 else
-  echo "Overall: Validation completed without failures."
+  printf "%bOverall: Validation completed without failures.%b\n" "$GREEN" "$RESET"
 fi
 exit 0
  
