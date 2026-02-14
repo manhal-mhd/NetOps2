@@ -67,10 +67,30 @@ prompt_with_default PARTNER_ZONE "Enter your partner's zone (e.g., pcYY.n2.nog-o
 
 # Auto-detect my server IPs (IPv4/IPv6)
 detect_ips() {
-  # IPv4: first non-loopback
-  MY_IPV4=$(ifconfig -a 2>/dev/null | awk '/inet / && $2 !~ /127\.0\.0\.1/ {print $2; exit}')
-  # IPv6: first global (non-loopback, non-link-local)
-  MY_IPV6=$(ifconfig -a 2>/dev/null | awk '/inet6 / && $2 !~ /::1/ && $2 !~ /fe80:/ {print $2; exit}')
+  # Prefer RFC1918 IPv4 (10/172.16-31/192.168), exclude 127/8; allow on any iface (including lo)
+  MY_IPV4=$(ifconfig -a 2>/dev/null |
+    awk '
+      /^[A-Za-z0-9].*:/ {iface=$1; sub(":$","",iface)}
+      $1=="inet" {
+        ip=$2;
+        if (ip ~ /^127\./) next;
+        # prefer private IPv4 ranges
+        if (ip ~ /^192\.168\./ || ip ~ /^10\./ || ip ~ /^172\.(1[6-9]|2[0-9]|3[0-1])\./) {print ip; exit}
+        # otherwise, first non-loopback interface IPv4
+        if (iface !~ /^lo/) {print ip; exit}
+      }
+    ')
+
+  # IPv6: first global (non-loopback iface, non-::1, non-link-local)
+  MY_IPV6=$(ifconfig -a 2>/dev/null |
+    awk '
+      /^[A-Za-z0-9].*:/ {iface=$1; sub(":$","",iface)}
+      $1=="inet6" {
+        ip=$2;
+        if (ip ~ /::1/ || ip ~ /^fe80:/) next;
+        if (iface !~ /^lo/) {print ip; exit}
+      }
+    ')
   # strip any scope id from IPv6
   if [ -n "$MY_IPV6" ]; then MY_IPV6=$(echo "$MY_IPV6" | sed 's/%.*$//'); fi
 }
