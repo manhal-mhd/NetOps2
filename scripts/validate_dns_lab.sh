@@ -1,6 +1,6 @@
 #!/bin/sh
 # Authoritative DNS Lab Validator (FreeBSD)
-# Validates configuration, zone files, AXFR, and resolver settings for your zone and your partner's zone.
+# Validates configuration, zone files, serial sync, optional AXFR (per ACLs), and resolver settings for your zone and your partner's zone.
 # Usage:
 #   Run with domains; IPs and zone file are auto-detected:
 #   ./validate_dns_lab.sh -z pcXX.n2.nog-oc.org -Z pcYY.n2.nog-oc.org
@@ -112,6 +112,18 @@ if [ -n "$MY_IPV4" ]; then
   PARTNER_IPV4=$(partner_ipv4_from_zone_ns "$MY_ZONE" "$PLABEL" "$MY_IPV4")
 fi
 
+# Extract allow-transfer IPv4 entries for my zone from zones.conf
+ALLOW_XFER_IPS=""
+if [ -r "/etc/namedb/zones.conf" ]; then
+  ALLOW_XFER_IPS=$(awk -v z="$MY_ZONE" '
+    $0 ~ "zone \"" z "\"" {inzone=1}
+    inzone && $0 ~ /allow-transfer/ {
+      line=$0; gsub(/.*\{/, "", line); gsub(/\}.*/, "", line); gsub(/;/, " ", line); print line; exit
+    }
+    inzone && $0 ~ /};/ {inzone=0}
+  ' /etc/namedb/zones.conf)
+fi
+
 echo "\n=== Validation Targets ==="
 echo "My zone:            $MY_ZONE"
 echo "Partner zone:        $PARTNER_ZONE"
@@ -119,6 +131,7 @@ echo "My IPv4 (auto):      ${MY_IPV4:-(not detected)}"
 echo "My IPv6 (auto):      ${MY_IPV6:-(not detected)}"
 echo "Partner IPv4 (from NS): ${PARTNER_IPV4:-(not detected)}"
 echo "My zone file (auto): ${MY_ZONE_FILE:-(not found)}"
+echo "allow-transfer IPs:  ${ALLOW_XFER_IPS:-(none found)}"
 echo "==========================\n"
 
 # 1) Check named.conf syntax
@@ -208,15 +221,9 @@ else
   wi "Could not retrieve both SOA serials for $MY_ZONE"
 fi
 
-# 7) AXFR tests for my zone
-if [ -n "$MY_IPV4" ]; then
-  AXFR_MY=$(dig AXFR "$MY_ZONE" @"$MY_IPV4" +nocmd +noall +answer 2>/dev/null)
-  if echo "$AXFR_MY" | grep -qi "SOA"; then
-    ok "AXFR from my server (IPv4) returned records"
-  else
-    wi "AXFR from my server (IPv4) returned no records (check allow-transfer, TCP/53)"
-  fi
-fi
+# 7) AXFR checks aligned with lab setup
+# Note: AXFR from the primary to itself is typically refused due to allow-transfer.
+#       Validate serial sync (above). Optional: test AXFR from the secondary.
 
 if [ -n "$PARTNER_IPV4" ]; then
   AXFR_PARTNER=$(dig AXFR "$MY_ZONE" @"$PARTNER_IPV4" +nocmd +noall +answer 2>/dev/null)
@@ -225,6 +232,15 @@ if [ -n "$PARTNER_IPV4" ]; then
   else
     wi "AXFR of my zone from partner (IPv4) returned no records (partner may restrict allow-transfer)"
   fi
+fi
+
+# 7b) Verify allow-transfer includes partner IPv4 (from zones.conf)
+if [ -n "$PARTNER_IPV4" ] && [ -n "$ALLOW_XFER_IPS" ]; then
+  echo "$ALLOW_XFER_IPS" | tr ' ' '\n' | grep -q "^$PARTNER_IPV4$" && \
+    ok "allow-transfer includes partner IPv4 ($PARTNER_IPV4)" || \
+    ko "allow-transfer does not include detected partner IPv4 ($PARTNER_IPV4)"
+else
+  wi "allow-transfer entries not found or partner IPv4 undetected"
 fi
 
 # 8) Validate partner zone served by my server (as secondary)
@@ -267,3 +283,4 @@ else
   echo "Overall: Validation completed without failures."
 fi
 exit 0
+ 
