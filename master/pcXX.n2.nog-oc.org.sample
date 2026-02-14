@@ -1,0 +1,16 @@
+$TTL 10m
+@   IN SOA pcXX.n2.nog-oc.org. afnog.pcXX.n2.nog-oc.org. (
+        2026021400 ; Serial (YYYYMMDDnn)
+        10m        ; Refresh
+        10m        ; Retry
+        4w         ; Expire
+        10m        ; Negative
+)
+
+    IN NS ns.pcXX.n2.nog-oc.org.
+    IN NS ns.pcYY.n2.nog-oc.org.
+
+@   IN A 192.168.XX.XX
+    IN AAAA 2a02:c207:2054:4961:XXXX::XX
+ns  IN A 192.168.XX.XX
+ns  IN AAAA 2a02:c207:2054:4961:XXXX::XX
