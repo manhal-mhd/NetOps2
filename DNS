@@ -1,0 +1,91 @@
+NetOps2 - DNS LAB : 
+--------------------------
+
+Master server :
+ zone  : 		pc202.n2.nog-oc.org
+   v4		    192.168.0.202 
+   v6 			2001:db8::ca
+secondary server :
+zone: 		pc200.n2.nog-oc.org
+v4 			192.168.0.200 
+v6 			2001:db8::c8
+
+---------------------------
+ pkg pkg search  bind  # to check the latest bind to install 
+ pkg install bind920
+
+sysrc named_enable=YES
+
+echo " include "/etc/namedb/zones.conf"; ''
+PC200 : 
+# This is your Zone details.
+zone "pc200.n2.nog-oc.org" {
+type master;
+notify yes;
+file "/usr/local/etc/namedb/primary/pc200.n2.nog-oc.org";
+allow-transfer { 192.168.0.202; 2001:db8::ca; };
+};
+# This is your partner's zone entry so that you can be his backup
+zone "pc201.n2.nog-oc.org" {
+type slave;
+file "/usr/local/etc/namedb/secondary/pc201.n2.nog-oc.orgg";
+masters {192.168.0.202; 2001:db8::ca; };
+};
+
+PC201
+# This is your Zone details.
+zone "pc201.n2.nog-oc.org" {
+type master;
+notify yes;
+file "/usr/local/etc/namedb/primary/pc200.n2.nog-oc.org";
+allow-transfer { 192.168.0.200; 2001:db8::c8; };
+};
+# This is your partner's zone entry so that you can be his backup
+zone "pc200.n2.nog-oc.org" {
+type slave;
+file "/usr/local/etc/namedb/secondary/pc201.n2.nog-oc.orgg";
+masters {192.168.0.200; 2001:db8::c8; };
+};
+
+
+------------------
+
+named-checkconfig on both servers 
+
+now lets create zone files :
+
+vi /etc/namedb/primary/pc200.n2.nog-oc.org
+$TTL 10m
+@ IN SOA pc200.n2.nog-oc.org. isoc.pc200.n2.nog-oc.org. (
+2026021200 ; Serial, please adjust to appropriate date
+10m ; Refresh - how soon the backup will check for new records
+10m ; Retry - how soon the backup should retry if Refresh fails
+4w ; Expire - how soon to expire the records if server unreachable
+10m ) ; Negative - how soon DNS resolvers should retry for non-existent RRs
+	IN NS ns.pc200.n2.nog-oc.org. ; master, this is your server
+	IN NS ns.pc202.n2.nog-oc.org. ; slave, this is your backup's Name Server
+@ IN A 192.168.0.200 ; your own IP
+  IN AAAA 2001:db8::c8
+ns IN A 192.168.0.200 ; your own IP
+ns IN AAAA 2001:db8::c8
+
+
+	------------------
+
+	server 2 :
+
+
+vi /etc/namedb/primary/pc202.n2.nog-oc.org
+$TTL 10m
+@ IN SOA pc202.n2.nog-oc.org. isoc.pc202.n2.nog-oc.org. (
+2026021200 ; Serial, please adjust to appropriate date
+10m ; Refresh - how soon the backup will check for new records
+10m ; Retry - how soon the backup should retry if Refresh fails
+4w ; Expire - how soon to expire the records if server unreachable
+10m ) ; Negative - how soon DNS resolvers should retry for non-existent RRs
+	IN NS ns.pc200.n2.nog-oc.org. ; master, this is your server
+	IN NS ns.pc202.n2.nog-oc.org. ; slave, this is your backup's Name Server
+@ IN A 192.168.0.202 ; your own IP
+	IN AAAA 2001:db8::ca
+	ns IN A 192.168.0.202 ; your own IP
+	ns IN AAAA 2001:db8::ca

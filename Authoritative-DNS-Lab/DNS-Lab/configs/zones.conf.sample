@@ -3,12 +3,12 @@
 zone "pcXX.n2.nog-oc.org" {
     type master;    // primary in guide terminology
     notify yes;
-    file "/usr/local/etc/namedb/master/pcXX.n2.nog-oc.org";
+    file "/usr/local/etc/namedb/primary/pcXX.n2.nog-oc.org";
     allow-transfer { 192.168.YY.YY; 2a02:c207:2054:4961:YYYY::YY; };
 };
 
 zone "pcYY.n2.nog-oc.org" {
     type slave;     // secondary in guide terminology
-    file "/usr/local/etc/namedb/slave/pcYY.n2.nog-oc.org";
+    file "/usr/local/etc/namedb/secondary/pcYY.n2.nog-oc.org";
     masters { 192.168.YY.YY; 2a02:c207:2054:4961:YYYY::YY; };
 };
