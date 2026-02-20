@@ -41,20 +41,25 @@ Dovecot is a popular open-source IMAP and POP3 server for Unix-like systems. In 
 
 Email communication relies on several well-known ports, each serving a specific protocol or function:
 
-| Protocol         | Port | Description                                                                 |
-|------------------|------|-----------------------------------------------------------------------------|
-| SMTP             | 25   | Standard port for sending email between mail servers (MTA to MTA).          |
-| SMTP (Submission)| 587  | Used by clients to submit outgoing email to the mail server (with STARTTLS). |
-| SMTPS            | 465  | Deprecated, but sometimes used for SMTP over SSL/TLS.                       |
-| POP3             | 110  | Standard port for retrieving email using POP3 (unencrypted).                 |
-| POP3S            | 995  | POP3 over SSL/TLS (encrypted).                                              |
-| IMAP             | 143  | Standard port for retrieving email using IMAP (unencrypted).                 |
-| IMAPS            | 993  | IMAP over SSL/TLS (encrypted).                                              |
+| Protocol (Full Name)         | Port | Description                                                                 |
+|------------------------------|------|-----------------------------------------------------------------------------|
+| SMTP (Simple Mail Transfer Protocol)             | 25   | Standard port for sending email between mail servers (MTA to MTA).          |
+| MSA (Mail Submission Agent, SMTP Submission)     | 587  | Used by clients to submit outgoing email to the mail server (with STARTTLS). |
+| SMTPS (Simple Mail Transfer Protocol Secure)     | 465  | Deprecated, but sometimes used for SMTP over SSL/TLS.                       |
+| POP3 (Post Office Protocol v3)                   | 110  | Standard port for retrieving email using POP3 (unencrypted).                 |
+| POP3S (Post Office Protocol v3 Secure)           | 995  | POP3 over SSL/TLS (encrypted).                                              |
+| IMAP (Internet Message Access Protocol)          | 143  | Standard port for retrieving email using IMAP (unencrypted).                 |
+| IMAPS (Internet Message Access Protocol Secure)  | 993  | IMAP over SSL/TLS (encrypted).                                              |
+
 
 ### Port Usage Summary
-- **SMTP (25, 587, 465):** Used for sending emails. Port 25 is for server-to-server, while 587 is recommended for client submission. Port 465 is legacy but still supported by some providers.
-- **POP3/POP3S (110, 995):** Used for downloading emails from the server to the client, typically removing them from the server.
-- **IMAP/IMAPS (143, 993):** Used for accessing and managing emails directly on the server, allowing synchronization across multiple devices.
+- **SMTP (Simple Mail Transfer Protocol, 25):** Used for sending emails between mail servers (server-to-server).
+- **MSA (Mail Submission Agent, 587):** Used by clients to submit outgoing email to the mail server (submission, with authentication).
+- **SMTPS (Simple Mail Transfer Protocol Secure, 465):** Legacy port for SMTP over SSL/TLS, still supported by some providers.
+- **POP3 (Post Office Protocol v3, 110):** Used for downloading emails from the server to the client (unencrypted).
+- **POP3S (Post Office Protocol v3 Secure, 995):** Used for downloading emails from the server to the client over SSL/TLS (encrypted).
+- **IMAP (Internet Message Access Protocol, 143):** Used for accessing and managing emails directly on the server (unencrypted).
+- **IMAPS (Internet Message Access Protocol Secure, 993):** Used for accessing and managing emails directly on the server over SSL/TLS (encrypted).
 
 ## Summary
 In summary, Dovecot is used in our mail server setup to provide reliable, secure, and efficient access to user mailboxes via IMAP and POP3. It complements the MTA (such as Postfix) by handling the retrieval and management of emails for end-users, ensuring a complete and robust mail solution.
