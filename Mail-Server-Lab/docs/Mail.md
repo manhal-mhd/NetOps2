@@ -14,6 +14,23 @@ A typical mail server setup consists of several key components, each responsible
 
 In many modern mail server setups, the MSA , MDA  and MTA are implemented by the same software (e.g., Postfix), but they serve distinct roles in the email delivery process.
 
+## Mapping Mail Components to Lab Software
+
+In this lab, the following software is used to implement each mail server component:
+
+| Component                        | Role/Function                                                      | Software Used |
+|-----------------------------------|--------------------------------------------------------------------|---------------|
+| Mail User Agent (MUA)             | User's email client for sending/receiving mail                     | Thunderbird, Outlook, or command-line tools (e.g., mailx) |
+| Mail Submission Agent (MSA)       | Accepts mail from MUA and submits to MTA (port 587)                | Postfix       |
+| Mail Transfer Agent (MTA)         | Transfers mail between servers (port 25)                           | Postfix       |
+| Mail Delivery Agent (MDA)         | Delivers mail to user mailboxes                                    | Postfix (with local delivery) |
+| IMAP/POP3 Server                  | Provides mailbox access to users                                   | Dovecot       |
+
+**Notes:**
+- In this lab, Postfix is configured to act as the MSA, MTA, and MDA.
+- Dovecot is used for IMAP/POP3 access, allowing users to retrieve and manage their emails securely.
+- The MUA can be any standard email client or command-line tool capable of connecting via SMTP/IMAP/POP3.
+
 ## Email Components and Flow Diagram
 
 Below is a diagram showing how the main email components interact:
