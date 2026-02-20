@@ -11,37 +11,8 @@ A typical mail server setup consists of several key components, each responsible
 ## Email Components and Flow Diagram
 
 Below is a diagram showing how the main email components interact:
+<img width="577" height="244" alt="image" src="https://github.com/user-attachments/assets/c8396b90-6401-4fa1-b0a0-06e14527785d" />
 
-```mermaid
-flowchart LR
-A[MUA] --> B[MTA]
-B --> C[MDA]
-C --> D[Mailbox]
-D --> E[Dovecot (IMAP/POP3)]
-E --> A
-B -.-> F[Remote MTA]
-F --> G[Remote User]
-
-subgraph User
-    A
-end
-subgraph Server
-    B
-    C
-    D
-    E
-end
-subgraph Internet
-    F
-    G
-end
-```
-<!--
-Legend:
-MUA = Mail User Agent
-MTA = Mail Transfer Agent
-MDA = Mail Delivery Agent
--->
 
 ## Why We Use Dovecot
 Dovecot is a popular open-source IMAP and POP3 server for Unix-like systems. In our mail server setup, Dovecot is used for the following reasons:
