@@ -14,18 +14,18 @@ Below is a diagram showing how the main email components interact:
 
 ```mermaid
 flowchart LR
-A[Mail User Agent (MUA)] -- Sends email --> B[Mail Transfer Agent (MTA)]
-B -- Delivers to --> C[Mail Delivery Agent (MDA)]
-C -- Stores in --> D[Mailbox]
-D -- Accessed by IMAP/POP3 --> E[IMAP/POP3 Server (Dovecot)]
-E -- Retrieves email --> A
-B -- Sends to other servers --> F[Remote MTA]
-F -- Delivers to remote mailbox --> G[Remote User]
+A[MUA] --> B[MTA]
+B --> C[MDA]
+C --> D[Mailbox]
+D --> E[Dovecot (IMAP/POP3)]
+E --> A
+B -.-> F[Remote MTA]
+F --> G[Remote User]
 
-subgraph User Side
+subgraph User
     A
 end
-subgraph Server Side
+subgraph Server
     B
     C
     D
@@ -36,6 +36,12 @@ subgraph Internet
     G
 end
 ```
+<!--
+Legend:
+MUA = Mail User Agent
+MTA = Mail Transfer Agent
+MDA = Mail Delivery Agent
+-->
 
 ## Why We Use Dovecot
 Dovecot is a popular open-source IMAP and POP3 server for Unix-like systems. In our mail server setup, Dovecot is used for the following reasons:
@@ -68,4 +74,3 @@ Email communication relies on several well-known ports, each serving a specific 
 
 ## Summary
 In summary, Dovecot is used in our mail server setup to provide reliable, secure, and efficient access to user mailboxes via IMAP and POP3. It complements the MTA (such as Postfix) by handling the retrieval and management of emails for end-users, ensuring a complete and robust mail solution.
-
