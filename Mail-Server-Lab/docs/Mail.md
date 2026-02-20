@@ -14,27 +14,27 @@ Below is a diagram showing how the main email components interact:
 
 ```mermaid
 flowchart LR
-	A[Mail User Agent (MUA)] -- Sends email --> B[Mail Transfer Agent (MTA)]
-	B -- Delivers to --> C[Mail Delivery Agent (MDA)]
-	C -- Stores in --> D[Mailbox]
-	D -- Accessed by IMAP/POP3 --> E[IMAP/POP3 Server (Dovecot)]
-	E -- Retrieves email --> A
-	B -- Sends to other servers --> F[Remote MTA]
-	F -- Delivers to remote mailbox --> G[Remote User]
-    
-	subgraph User Side
-		A
-	end
-	subgraph Server Side
-		B
-		C
-		D
-		E
-	end
-	subgraph Internet
-		F
-		G
-	end
+A[Mail User Agent (MUA)] -- Sends email --> B[Mail Transfer Agent (MTA)]
+B -- Delivers to --> C[Mail Delivery Agent (MDA)]
+C -- Stores in --> D[Mailbox]
+D -- Accessed by IMAP/POP3 --> E[IMAP/POP3 Server (Dovecot)]
+E -- Retrieves email --> A
+B -- Sends to other servers --> F[Remote MTA]
+F -- Delivers to remote mailbox --> G[Remote User]
+
+subgraph User Side
+    A
+end
+subgraph Server Side
+    B
+    C
+    D
+    E
+end
+subgraph Internet
+    F
+    G
+end
 ```
 
 ## Why We Use Dovecot
