@@ -8,11 +8,28 @@ A typical mail server setup consists of several key components, each responsible
 - **Mail User Agent (MUA):** The client application used by end-users to read and send emails (e.g., Thunderbird, Outlook).
 - **IMAP/POP3 Server:** Provides access to mailboxes for users, allowing them to retrieve and manage their emails. This is where Dovecot comes in.
 
+## What is an MSA (Mail Submission Agent)?
+
+The **Mail Submission Agent (MSA)** is responsible for accepting email messages from a Mail User Agent (MUA, such as your email client) and forwarding them to the Mail Transfer Agent (MTA) for delivery.
+
+- The MSA typically listens on port 587 (the submission port).
+- It enforces authentication and applies policies (such as spam checks or rate limits) before passing the message to the MTA.
+- The MSA separates the process of accepting mail from users (submission) from the process of relaying mail between servers (transfer).
+
+In many modern mail server setups, the MSA and MTA are implemented by the same software (e.g., Postfix), but they serve distinct roles in the email delivery process.
+
 ## Email Components and Flow Diagram
 
 Below is a diagram showing how the main email components interact:
-<img width="577" height="244" alt="image" src="https://github.com/user-attachments/assets/c8396b90-6401-4fa1-b0a0-06e14527785d" />
 
+<img width="577" height="244" alt="image" src="https://github.com/user-attachments/assets/54ba3b08-4bb5-41e4-8b27-c2d389c14c71" />
+
+
+Legend:
+- MUA: Mail User Agent
+- MTA: Mail Transfer Agent
+- MDA: Mail Delivery Agent
+- Dovecot: IMAP/POP3 Server
 
 ## Why We Use Dovecot
 Dovecot is a popular open-source IMAP and POP3 server for Unix-like systems. In our mail server setup, Dovecot is used for the following reasons:
