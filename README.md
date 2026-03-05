@@ -29,7 +29,15 @@ This guide provides recommendations and daily practices for system engineers man
   - Enables change tracking, rollback, and audit trails.
   - Document all significant changes in commit messages.
 
-### 4. Document Everything
+### 4. Prefer Custom Configuration Files
+- **Avoid editing main configuration files directly** as much as possible.
+  - Use custom or supplemental configuration files wherever supported to ease management and troubleshooting.
+  - For example:
+    - In DNS setups (as in our DNS lab), use separate zone configuration files instead of editing the main `named.conf`.
+    - In Nagios (as in our Nagios lab), define hosts and services in custom config files in the `lab` directory rather than directly modifying `nagios.cfg`.
+  - This approach makes updates safer, troubleshooting faster, and reduces the risk of accidental misconfiguration.
+
+### 5. Document Everything
 - **Maintain a changelog** for your services and systems. Include:
   - Date and nature of changes
   - Reason for changes
@@ -39,21 +47,21 @@ This guide provides recommendations and daily practices for system engineers man
 - **Write procedural runbooks** for repeating tasks (e.g., adding DNS records, configuring email filtering).
   - Make documentation accessible to the team.
 
-### 5. Backups and Recovery
+### 6. Backups and Recovery
 - **Automate regular backups** for config files, mail data, DNS zones, and monitoring configurations.
 - **Test recovery procedures** regularly—know how to restore quickly.
 
-### 6. Proactive Monitoring
+### 7. Proactive Monitoring
 - **Monitor services** using tools like `Nagios`, `Zabbix`, or `Prometheus`.
 - **Set up alerts** for abnormal behavior, resource exhaustion, or failed services.
 - **Regularly review monitoring dashboards** for trends and anomalies.
 
-### 7. Troubleshooting Mindset
+### 8. Troubleshooting Mindset
 - **Gather comprehensive information** before action: check logs, configs, recent changes, network status.
 - **Formulate a hypothesis, test, and document results.**
 - **Use diff tools** (`diff`, `git`, `etckeeper`) to compare current and previous configurations.
 
-### 8. Security Awareness
+### 9. Security Awareness
 - **Apply least privilege** when managing accounts and permissions.
 - **Rotate passwords and keys**
 - **Regularly update packages and patch vulnerabilities.**
