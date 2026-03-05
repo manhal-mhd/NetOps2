@@ -86,5 +86,15 @@ This guide provides recommendations and daily practices for system engineers man
 
 ---
 
+## Useful Websites
+
+- [Server World](https://www.server-world.info) — Step-by-step guides for setting up internet services.
+- [Linuxize](https://linuxize.com) — Tutorials for Linux commands and server configurations.
+- [DigitalOcean Community Tutorials](https://www.digitalocean.com/community/tutorials) — Guides for managing servers and cloud resources.
+- [HowtoForge](https://www.howtoforge.com) — Extensive server configuration guides and troubleshooting articles.
+- [Stack Overflow](https://stackoverflow.com) — Community-driven troubleshooting and Q&A.
+
+---
+
 _This guide is a living document—feel free to customize and expand as your team's needs evolve._
 
