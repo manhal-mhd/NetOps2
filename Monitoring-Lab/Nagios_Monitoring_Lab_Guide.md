@@ -110,6 +110,58 @@ Start Apache:
 ---
 
 ## PART 3: Nagios Setup
+## Understanding Nagios Structure
+
+Before you begin installation, it's important to understand how Nagios organizes its files and configurations. Nagios is built to be flexible and modular, and its directory layout plays a big role in managing monitoring definitions and plugins.
+
+### Key Components:
+
+- **Core Daemon (`nagios`):**  
+  The main Nagios process reads configuration files and runs checks.
+
+- **Configuration Files:**
+  - **Main Config (`nagios.cfg`):**  
+    Sets global options and lists object config files or directories.
+  - **Object Configs (`objects/*.cfg`):**  
+    Definitions for hosts, services, contacts, timeperiods, commands, and templates.
+  - **Resource Config (`resource.cfg`):**  
+    Stores user macros, often paths to plugins.
+
+- **Web Interface (CGI):**  
+  Allows you to view status and logs in your browser, usually at `/usr/local/www/nagios/` and `/usr/local/www/nagios/cgi-bin`.
+
+- **Plugins:**  
+  Scripts and binaries that perform the actual checks, located in `/usr/local/libexec/nagios/`. Configured via command definitions.
+
+- **Authentication:**  
+  Access to the web interface is restricted using user accounts (defined in `htpasswd.users`).
+
+### Typical Directory Layout:
+
+```plaintext
+/usr/local/etc/nagios/
+  nagios.cfg
+  resource.cfg
+  cgi.cfg
+  objects/
+    commands.cfg
+    contacts.cfg
+    hosts.cfg
+    services.cfg
+    templates.cfg
+    (custom directories, e.g. lab-specific configs)
+  htpasswd.users
+
+/usr/local/www/nagios/               ← Web UI files.
+      cgi-bin/                       ← CGI scripts for web frontend.
+
+ /usr/local/libexec/nagios/          ← Official and custom plugins.
+```
+
+Nagios's flexibility comes from separating definitions (in *.cfg files) from general settings, plugins, and the web interface. You can add your own directories for lab environments, group configurations for different client setups, and build custom checks.
+
+---
+
 
 ### 3.1 Install Nagios
 
