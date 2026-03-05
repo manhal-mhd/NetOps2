@@ -1,4 +1,4 @@
-# Nagios Monitoring Lab Guide (Comprehensive)
+# Nagios Monitoring Lab Guide
 
 This guide provides a **step-by-step walkthrough** for setting up a monitoring lab using Nagios on FreeBSD with Apache and PHP. Explanations are included at each step so you understand both the **configuration process** and the **purpose of each file and option**.
 
