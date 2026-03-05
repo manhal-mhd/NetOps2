@@ -181,7 +181,7 @@ Or use the tool:
 # sysrc nagios_enable="YES"
 ```
 
-**Nagios requires PHP. Check which PHP version you have installed:**
+**Nagios requires PHP. Check which PHP version  installed:**
 
 ```sh
 php -v
@@ -264,7 +264,7 @@ Go into it and create your custom lab config file:
 
 ```sh
 # cd /usr/local/etc/nagios/objects/lab
-# ee iso-lab.cfg
+# ee isoc-lab.cfg
 ```
 
 Paste:
@@ -455,7 +455,7 @@ You will see the Nagios dashboard if setup is correct.
 To monitor additional services (CPU, memory, HTTP, etc.), add more `define service` blocks to:
 
 ```sh
-# ee /usr/local/etc/nagios/objects/lab/iso-lab.cfg
+# ee /usr/local/etc/nagios/objects/lab/isoc-lab.cfg
 
 # Host for partner server
 define host {
