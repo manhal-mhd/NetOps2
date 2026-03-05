@@ -18,6 +18,13 @@ Begin by installing the necessary packages for your monitoring setup. This inclu
 >
 > - `apache24` provides the web server that will serve both Nagios and its web interface.
 
+> enable apache and check if its running , use the following proxy setup to access lab ipv6 environment 
+> - Proxy IP : 134.209.42.47 
+> - Proxy port:  8080 
+> - Credentials : afnog/netops2
+
+> you need to set this proxy in your browser 
+
 ### 1.2 Configure Apache for PHP
 
 Nagios's web interface may use PHP files. To ensure Apache processes PHP files correctly, add these lines to your Apache configuration (usually found in `/usr/local/etc/apache24/httpd.conf`):
@@ -232,20 +239,7 @@ define service {
     check_command           check_dig!pcXX.n2.nog-oc.org
 }
 
-# Host for partner server
-define host {
-    use                     freebsd-server
-    host_name               pcYY.n2.nog-oc.org
-    alias                   Partner Zone
-    address                 192.168.0.YY
-}
 
-define service {
-    use                     generic-service
-    host_name               pcYY.n2.nog-oc.org
-    service_description     DNS Monitor
-    check_command           check_dig!pcYY.n2.nog-oc.org
-}
 ```
 
 > **Explanation of Nagios definitions:**
@@ -422,6 +416,21 @@ To monitor additional services (CPU, memory, HTTP, etc.), add more `define servi
 
 ```sh
 # ee /usr/local/etc/nagios/objects/lab/iso-lab.cfg
+
+# Host for partner server
+define host {
+    use                     freebsd-server
+    host_name               pcYY.n2.nog-oc.org
+    alias                   Partner Zone
+    address                 192.168.0.YY
+}
+
+define service {
+    use                     generic-service
+    host_name               pcYY.n2.nog-oc.org
+    service_description     DNS Monitor
+    check_command           check_dig!pcYY.n2.nog-oc.org
+}
 ```
 
 After editing, always check and restart:
