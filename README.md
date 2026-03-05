@@ -16,8 +16,12 @@ This guide provides recommendations and daily practices for system engineers man
 
 ### 2. Controlled Service Management
 - **Restart or reload services after editing configuration files.**
-  - Use `systemctl restart <service>` or `systemctl reload <service>`
-  - Always confirm service status: `systemctl status <service>`
+  - On Linux:  
+    - Use `systemctl restart <service>` or `systemctl reload <service>`
+    - Always confirm service status: `systemctl status <service>`
+  - On FreeBSD:  
+    - Use `service <service> restart`
+    - Always confirm service status: `service <service> status`
 - **Announce downtime** if changes may impact users. Communicate clearly with stakeholders.
 
 ### 3. Track Configuration Changes
@@ -79,7 +83,7 @@ This guide provides recommendations and daily practices for system engineers man
 ## Useful Tools
 
 - **Service Syntax Checkers**: `nginx`, `apachectl`, `postfix`, `named-checkconf`, `named-checkzone`
-- **Service Management**: `systemctl`, `service`
+- **Service Management**: `systemctl`, `service` (Linux), `service` (FreeBSD)
 - **Change Tracking**: `etckeeper`, `git`
 - **Monitoring**: `Nagios`, `Zabbix`, `Prometheus`
 - **Backup**: `rsync`, `bacula`, `borgbackup`
@@ -97,4 +101,3 @@ This guide provides recommendations and daily practices for system engineers man
 ---
 
 _This guide is a living document—feel free to customize and expand as your team's needs evolve._
-
