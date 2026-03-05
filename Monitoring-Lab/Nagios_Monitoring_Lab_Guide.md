@@ -327,19 +327,7 @@ Nagios's web interface is password protected. Create the admin user ("nagiosadmi
 ---
 
 ## PART 7: Configure Apache for Nagios (CGI + Auth)
-
-**CGI** is required for Nagios's web interface. In Apache's main config (`httpd.conf`), ensure these modules are present:
-
-```apache
-<IfModule !mpm_prefork_module>
-    LoadModule cgid_module libexec/apache24/mod_cgid.so
-</IfModule>
-<IfModule mpm_prefork_module>
-    LoadModule cgi_module libexec/apache24/mod_cgi.so
-</IfModule>
-```
-
-Then, create a dedicated config for Nagios:
+ create a dedicated config for Nagios:
 
 ```sh
 # ee /usr/local/etc/apache24/Includes/nagios.conf
@@ -349,7 +337,7 @@ Paste:
 
 ```apache
 #============= NAGIOS CONFIGURATION =============
-
+# CGI is required for Nagios's web interface ensure these modules are present:
 # CGI Module Loading
 <IfModule !mpm_prefork_module>
     LoadModule cgid_module libexec/apache24/mod_cgid.so
