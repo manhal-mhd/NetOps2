@@ -59,7 +59,7 @@ This guide provides recommendations and daily practices for system engineers man
 ### 8. Troubleshooting Mindset
 - **Gather comprehensive information** before action: check logs, configs, recent changes, network status.
 - **Formulate a hypothesis, test, and document results.**
-- **Use diff tools** (`diff`, `git`, `etckeeper`) to compare current and previous configurations 'we dont have CTRL+Z in linux so better have git in your system'
+- **Use diff tools** (`diff`, `git`, `etckeeper`) to compare current and previous configurations `we dont have CTRL+Z in linux so better have git in your system`
 - **man pages** always use Built-in documentation , man [command] for official docs, search with /, use before Googling or asking AI 
 
 ### 9. Security Awareness
