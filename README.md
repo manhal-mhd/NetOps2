@@ -60,6 +60,7 @@ This guide provides recommendations and daily practices for system engineers man
 - **Gather comprehensive information** before action: check logs, configs, recent changes, network status.
 - **Formulate a hypothesis, test, and document results.**
 - **Use diff tools** (`diff`, `git`, `etckeeper`) to compare current and previous configurations.
+- **man pages** always use Built-in documentation , man [command] for official docs, search with /, use before Googling or asking AI 
 
 ### 9. Security Awareness
 - **Apply least privilege** when managing accounts and permissions.
