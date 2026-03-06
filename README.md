@@ -95,7 +95,7 @@ This guide provides recommendations and daily practices for system engineers man
 - **Change Tracking**: `etckeeper`, `git`
 - **Monitoring**: `Nagios`, `Zabbix`, `Prometheus`
 - **Backup**: `rsync`, `bacula`, `borgbackup`
-- **MobaXterm**: `if you are on windows , use [mobaxterm](https://mobaxterm.mobatek.net/download.html) its a life changer  `
+- **MobaXterm**: if you are on windows , use [mobaxterm](https://mobaxterm.mobatek.net/download.html) its a life changer
 
 ---
 
