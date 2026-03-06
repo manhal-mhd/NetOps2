@@ -478,6 +478,8 @@ After editing, always check and restart:
 ## Assignment Submission
 
 > **Submit a screenshot of your Nagios services page showing all OK/green statuses in the service grid.**
+<img width="824" height="203" alt="image" src="https://github.com/user-attachments/assets/b7813c5d-ff21-483a-9c94-e64b88d00c11" />
+
 
 ---
 
