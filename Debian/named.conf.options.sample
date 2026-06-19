@@ -1,0 +1,10 @@
+# /etc/bind/named.conf.options (sample)
+# This file already gets included by the default /etc/bind/named.conf — no extra include line needed.
+
+options {
+    directory "/var/cache/bind";
+    recursion no;                      // authoritative only
+    listen-on { 127.0.0.1; 192.168.XX.XX; };
+    listen-on-v6 { ::1; 2a02:c207:2054:4961:XXXX::XX; };
+    dnssec-validation no;              // simplify lab
+};
