@@ -237,8 +237,7 @@ You should see Dovecot listening on `*:143`.
 
 2) Send mail and watch logs
 ```sh
-mail -s "this is a test mail" afnog@mail.pcXX.n2.nog-oc.org
-# type message body, then a single dot on its own line to finish
+echo "this is a test mail body" | mail -s "this is a test mail" isoc@mail.pc215.n2.noc-oc.org# type message body, then a single dot on its own line to finish
 .
 
 tail -f /var/log/mail.log
